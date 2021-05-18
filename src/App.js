@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { StreamChat } from "stream-chat";
+import {
+  Chat,
+  Channel,
+  ChannelHeader,
+  MessageInput,
+  MessageList,
+  Thread,
+  Window,
+} from "stream-chat-react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import "stream-chat-react/dist/css/index.css";
+
+const chatClient = StreamChat.getInstance("6q6pcdr3h4av");
+
+chatClient.connectUser(
+  {
+    id: "murad",
+    name: "Murad Cholukov",
+    image:
+      "https://getstream.io/random_png/?id=falling-poetry-4&name=falling-poetry-4",
+  },
+  chatClient.devToken("murad")
+);
+
+const channel = chatClient.channel("messaging", "murad", {
+  // add as many custom fields as you'd like
+  image: "https://www.drupal.org/files/project-images/react.png",
+  name: "Awesome Channel",
+  members: ["murad"],
+});
+
+const App = () => (
+  <Chat client={chatClient} theme="messaging light">
+    <Channel channel={channel}>
+      <Window>
+        <ChannelHeader />
+        <MessageList />
+        <MessageInput />
+      </Window>
+      <Thread />
+    </Channel>
+  </Chat>
+);
 
 export default App;
