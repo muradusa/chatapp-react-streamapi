@@ -1,70 +1,40 @@
 import React, { useEffect } from "react";
-import { StreamChat } from "stream-chat";
-import {
-  Chat,
-  Channel,
-  ChannelHeader,
-  MessageInput,
-  MessageList,
-  Thread,
-  Window,
-} from "stream-chat-react";
+import Login from "./Login";
 
-import "stream-chat-react/dist/css/index.css";
+import { useSelector, useDispatch } from "react-redux";
+import { login, logout, selectUser } from "./userSlice";
+import { auth } from "./Firebase";
+import Home from "./Home";
 
-const chatClient = StreamChat.getInstance("6q6pcdr3h4av");
+function App() {
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
 
-chatClient.connectUser(
-  {
-    id: "murad",
-    name: "Murad Cholukov",
-    image:
-      "https://media-exp1.licdn.com/dms/image/C5603AQFNmzrc9sYQAA/profile-displayphoto-shrink_100_100/0/1618869151834?e=1625097600&v=beta&t=dnJbaZj4Xvi-EFOcDpLXxqifC0CQDwPWj2hdsR7zniw",
-  },
-  chatClient.devToken("murad")
-);
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      console.log(authUser);
+      if (authUser) {
+        // the user is logged in
+        dispatch(
+          login({
+            uid: authUser.uid,
+            photo: authUser.photoURL,
+            email: authUser.email,
+            displayName: authUser.displayName,
+          })
+        );
+      } else {
+        // the user is logged out
+        dispatch(logout());
+      }
+    });
+  }, [dispatch]);
 
-const login = () => {
-  chatClient.connectUser(
-    {
-      id: "murad",
-      name: "Murad Cholukov",
-      image:
-        "https://media-exp1.licdn.com/dms/image/C5603AQFNmzrc9sYQAA/profile-displayphoto-shrink_100_100/0/1618869151834?e=1625097600&v=beta&t=dnJbaZj4Xvi-EFOcDpLXxqifC0CQDwPWj2hdsR7zniw",
-    },
-    chatClient.devToken("murad")
-  );
-};
-
-const logout = () => {
-  chatClient.disconnectUser();
-};
-
-const channel = chatClient.channel("messaging", "murad", {
-  // add as many custom fields as you'd like
-  image: "https://www.drupal.org/files/project-images/react.png",
-  name: "Awesome Channel",
-  members: ["murad", "jonh"],
-});
-
-const App = () => {
   return (
-    <div>
-      <button onClick={login}>Login</button>
-      <button onClick={logout}>Log out</button>
-
-      <Chat client={chatClient} theme="messaging light">
-        <Channel channel={channel}>
-          <Window>
-            <ChannelHeader />
-            <MessageList />
-            <MessageInput />
-          </Window>
-          <Thread />
-        </Channel>
-      </Chat>
+    <div className="app">
+      <header className="app__header">{user ? <Home /> : <Login />}</header>
     </div>
   );
-};
+}
 
 export default App;
