@@ -45,11 +45,11 @@ const Home = () => {
     auth.signOut();
   };
 
-  const channel = chatClient.channel("messaging", user.uid, {
+  const channel = chatClient.channel("messaging", {
     // add as many custom fields as you'd like
     image: "https://www.drupal.org/files/project-images/react.png",
-    name: "Awesome Channel",
-    members: [user.uid],
+    name: "Multiple Channel",
+    members: ["YK6BBrvv0SdqhcXEmeh5Wy3Iocl1", "BvCBICUiDFTpIGIZ2JL3UG2DaO13"],
   });
 
   return (
