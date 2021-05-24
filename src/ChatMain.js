@@ -47,9 +47,9 @@ const ChatMain = () => {
     auth.signOut();
   };
 
-  const filters = { type: "messaging" };
+  // const filters = { type: "messaging" };
   const sort = { last_message_at: -1 };
-  const theme = "messaging dark";
+  const theme = "messaging light";
   const Paginator = (props) => (
     <InfiniteScrollPaginator threshold={300} {...props} />
   );
@@ -65,13 +65,48 @@ const ChatMain = () => {
   //   ],
   // });
 
+  // const channel = chatClient.channel(
+  //   "messaging",
+  //   "!members-9Ug3bicBB0XQQMCgzr5zpD56RwU1gc7DXN4L5UpPQhI"
+  // );
+  // channel.delete();
+
+  const handleAddChannel = () => {
+    const channelName = prompt("add channel name");
+    const channel = chatClient.channel("messaging", channelName, {
+      name: channelName,
+      image: user.photo,
+    });
+
+    if (channelName) {
+      channel.create().then(() => {
+        const location = window.location;
+        location.reload();
+      });
+    }
+  };
+
+  const handleDeleteChannel = () => {
+    const channelName = prompt(
+      "type the name of the channel you want to delete"
+    );
+    const channel = chatClient.channel("messaging", channelName);
+    channel.delete().then(() => {
+      // const location = window.location;
+      // location.reload();
+    });
+  };
+
   return (
     <div>
       {/* <button onClick={login}>Login</button> */}
       <button onClick={logout}>Log out</button>
+      <button onClick={handleAddChannel}>add a channel</button>
+      <button onClick={handleDeleteChannel}>delete a channel</button>
 
-      <Chat client={chatClient} theme="messaging light">
-        <ChannelList filters={filters} sort={sort} Paginator={Paginator} />
+      <Chat client={chatClient} theme={theme}>
+        <ChannelList sort={sort} Paginator={Paginator} />
+
         <Channel>
           <Window>
             <ChannelHeader />
