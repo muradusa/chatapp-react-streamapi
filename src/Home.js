@@ -1,14 +1,126 @@
-import React from "react";
-import Sidebar from "./Sidebar";
-import ChatMain from "./ChatMain";
+import React, { useEffect } from "react";
+import { StreamChat } from "stream-chat";
+import {
+  Chat,
+  Channel,
+  ChannelList,
+  InfiniteScrollPaginator,
+  ChannelHeader,
+  MessageInput,
+  MessageList,
+  Thread,
+  Window,
+} from "stream-chat-react";
+import { auth } from "./Firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser } from "./userSlice";
 
-function Home() {
+import "stream-chat-react/dist/css/index.css";
+
+const Home = () => {
+  const user = useSelector(selectUser);
+
+  const chatClient = StreamChat.getInstance("6q6pcdr3h4av");
+
+  chatClient.connectUser(
+    {
+      id: user.uid,
+      name: user.displayName,
+      image: user.photo,
+    },
+    chatClient.devToken(user.uid)
+  );
+
+  const login = () => {
+    chatClient.connectUser(
+      {
+        id: user.uid,
+        name: user.displayName,
+        image: user.photo,
+      },
+      chatClient.devToken("murad")
+    );
+  };
+
+  const logout = () => {
+    chatClient.disconnectUser();
+    auth.signOut();
+  };
+
+  // const filters = { type: "messaging" };
+  const sort = { last_message_at: -1 };
+  const theme = "messaging light";
+  const Paginator = (props) => (
+    <InfiniteScrollPaginator threshold={300} {...props} />
+  );
+
+  // const channel = chatClient.channel("messaging", {
+  //   // add as many custom fields as you'd like
+  //   image: "https://www.drupal.org/files/project-images/react.png",
+  //   name: "Multiple Channel",
+  //   members: [
+  //     "YK6BBrvv0SdqhcXEmeh5Wy3Iocl1",
+  //     "BvCBICUiDFTpIGIZ2JL3UG2DaO13",
+  //     //   "r4XL5UjwYHR2qNMuXVWwI5kNRKI3",
+  //   ],
+  // });
+
+  // const channel = chatClient.channel(
+  //   "messaging",
+  //   "!members-9Ug3bicBB0XQQMCgzr5zpD56RwU1gc7DXN4L5UpPQhI"
+  // );
+  // channel.delete();
+
+  const handleAddChannel = () => {
+    const channelName = prompt("add channel name");
+    const channel = chatClient.channel("messaging", channelName, {
+      name: channelName,
+      image: user.photo,
+    });
+
+    if (channelName) {
+      channel.create().then(() => {
+        const location = window.location;
+        location.reload();
+      });
+    }
+  };
+
+  const handleDeleteChannel = () => {
+    const channelName = prompt(
+      "type the name of the channel you want to delete"
+    );
+    const channel = chatClient.channel("messaging", channelName);
+    channel.delete().then(() => {
+      // const location = window.location;
+      // location.reload();
+    });
+  };
+
   return (
     <div>
-      {/* <Sidebar style={{ flex: 0.3 }} /> */}
-      <ChatMain />
+      {/* <button onClick={login}>Login</button> */}
+
+      <Chat client={chatClient} theme={theme}>
+        <ChannelList sort={sort} Paginator={Paginator} />
+
+        <Channel>
+          <Window>
+            <div style={{ display: "flex" }}>
+              <button onClick={logout}>Log out</button>
+              <button onClick={handleAddChannel}>add a channel</button>
+              <button onClick={handleDeleteChannel}>delete a channel</button>
+            </div>
+
+            <ChannelHeader />
+            <MessageList />
+            <MessageInput />
+          </Window>
+          <Thread />
+        </Channel>
+      </Chat>
     </div>
   );
-}
+};
 
 export default Home;
