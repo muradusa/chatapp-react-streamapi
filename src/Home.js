@@ -106,7 +106,7 @@ const Home = () => {
 
         <Channel>
           <Window>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <button onClick={logout}>Log out</button>
               <button onClick={handleAddChannel}>add a channel</button>
               <button onClick={handleDeleteChannel}>delete a channel</button>
