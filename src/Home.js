@@ -65,12 +65,6 @@ const Home = () => {
   //   ],
   // });
 
-  // const channel = chatClient.channel(
-  //   "messaging",
-  //   "!members-9Ug3bicBB0XQQMCgzr5zpD56RwU1gc7DXN4L5UpPQhI"
-  // );
-  // channel.delete();
-
   const handleAddChannel = () => {
     const channelName = prompt("add channel name");
     const channel = chatClient.channel("messaging", channelName, {
