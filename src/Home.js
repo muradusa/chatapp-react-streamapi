@@ -69,7 +69,7 @@ const Home = () => {
     const channelName = prompt("add channel name");
     const channel = chatClient.channel("messaging", channelName, {
       name: channelName,
-      image: user.photo,
+      // image: user.photo,
     });
 
     if (channelName) {
@@ -86,8 +86,8 @@ const Home = () => {
     );
     const channel = chatClient.channel("messaging", channelName);
     channel.delete().then(() => {
-      // const location = window.location;
-      // location.reload();
+      const location = window.location;
+      location.reload();
     });
   };
 
@@ -100,41 +100,10 @@ const Home = () => {
 
         <Channel>
           <Window>
-            {/* <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <button onClick={logout}>Log out</button>
-              <button onClick={handleAddChannel}>add a channel</button>
-              <button onClick={handleDeleteChannel}>delete a channel</button>
-            </div> */}
-            <div className="mt-6 grid grid-cols-3 gap-3 cursor-pointer">
-              <div>
-                <a
-                  onClick={logout}
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                >
-                  <p className="flex w-15 h-5">Logout</p>
-                </a>
-              </div>
-              <div>
-                <a
-                  onClick={handleAddChannel}
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                >
-                  <p className="flex w-15 h-5">New Channel</p>
-                </a>
-              </div>
-
-              <div>
-                <a
-                  onClick={handleDeleteChannel}
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                >
-                  <p className="w-15 h-5">Delete Channel</p>
-                </a>
-              </div>
-            </div>
-
             <ChannelHeader />
+
             <MessageList />
+
             <MessageInput />
           </Window>
           <Thread />

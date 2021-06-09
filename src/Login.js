@@ -1,4 +1,5 @@
 import { auth, provider } from "./Firebase";
+import duck from "./duck.png";
 
 import React from "react";
 
@@ -20,7 +21,8 @@ export default function Login() {
         <div className="sm:mx-auto sm:w-full sm:max-w-md mb-10">
           <img
             className="mx-auto h-12 w-auto mb-10"
-            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+            src={duck}
+            // src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
             alt="Workflow"
           />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
