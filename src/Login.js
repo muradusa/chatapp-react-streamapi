@@ -20,7 +20,7 @@ export default function Login() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="sm:mx-auto sm:w-full sm:max-w-md mb-10">
           <img
-            className="mx-auto h-12 w-auto mb-10"
+            className="mx-auto h-64 w-auto mb-10"
             src={duck}
             // src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
             alt="Workflow"

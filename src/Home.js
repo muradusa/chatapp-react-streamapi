@@ -93,7 +93,7 @@ const Home = () => {
 
   return (
     <div>
-      {/* <button onClick={login}>Login</button> */}
+      <button onClick={logout}>Login</button>
 
       <Chat client={chatClient} theme={theme}>
         <ChannelList sort={sort} Paginator={Paginator} />
